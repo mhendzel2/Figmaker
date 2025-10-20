@@ -1,0 +1,55 @@
+[project]
+name = "figmaker"
+version = "0.2.0"
+description = "Scientific figure assembly tool with publication-ready exports"
+requires-python = ">=3.10"
+dependencies = [
+  "pandas>=2.2",
+  "numpy>=1.26",
+  "matplotlib>=3.9",
+  "typer>=0.12",
+  "pydantic>=2.7",
+  "PyYAML>=6.0",
+  "Pillow>=10.0",
+  "customtkinter>=5.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "pytest-mpl", "ruff", "black", "mypy"]
+
+[project.scripts]
+figmaker = "figmaker.cli:app"
+
+[project.urls]
+"Homepage" = "https://github.com/mhendzel2/Figmaker"
+"Repository" = "https://github.com/mhendzel2/Figmaker"
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "B",  # flake8-bugbear
+    "C4", # flake8-comprehensions
+    "UP", # pyupgrade
+]
+ignore = [
+    "E501", # line too long, handled by black
+]
+
+[tool.black]
+line-length = 88
+target-version = ['py310']

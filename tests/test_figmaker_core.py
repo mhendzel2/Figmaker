@@ -39,9 +39,9 @@ class DummyApp(FigureAssemblerApp):
     def update_panel_list(self):
         pass
 
-    def display_image(self, img):
+    def display_image(self, pil_image):
         # For tests, don't require a real canvas — just store the image
-    self._last_displayed = pil_image
+        self._last_displayed = pil_image
 
 
 def make_test_image(color=(200, 100, 50), size=(100, 80)):
@@ -105,5 +105,3 @@ def test_assemble_with_transparent_bg():
 
     assert app.assembled_image is not None
     assert app.assembled_image.mode == 'RGBA'
-
-*** End Patch

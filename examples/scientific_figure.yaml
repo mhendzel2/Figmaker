@@ -1,0 +1,78 @@
+# Example recipe for publication-ready scientific figure
+version: "1"
+
+data:
+  - name: expression_data
+    path: "data/gene_expression.csv"
+  - name: volcano_data  
+    path: "data/deseq_results.csv"
+
+figure:
+  style: nature
+  width_cm: 18.0
+  height_cm: 15.0
+  dpi: 600
+  background: white
+  font_family: Arial
+  label_style: "A, B, C..."
+  
+  panels:
+    - title: "Gene Expression Heatmap"
+      plot: heatmap
+      data: expression_data
+      x: gene
+      y: sample
+      hue: log2_expression
+      transforms:
+        - op: filter
+          args: 
+            expr: "padj < 0.05"
+        - op: select
+          args:
+            cols: ["gene", "sample", "log2_expression"]
+      kwargs:
+        cmap: "RdBu_r"
+        center: 0
+        
+    - title: "Volcano Plot"  
+      plot: volcano
+      data: volcano_data
+      x: log2FoldChange
+      y: neglog10_pvalue
+      hue: significance
+      transforms:
+        - op: p_adjust_bh
+          args:
+            pcol: "pvalue"
+            out: "padj"
+        - op: mutate
+          args:
+            neglog10_pvalue: "-log10(padj + 1e-16)"
+            significance: "where(padj < 0.001, 'High', where(padj < 0.05, 'Moderate', 'NS'))"
+      kwargs:
+        alpha: 0.6
+        s: 20
+        
+    - title: "Top Genes"
+      plot: box_swarm
+      data: expression_data
+      x: condition
+      y: expression
+      hue: treatment
+      transforms:
+        - op: filter
+          args:
+            expr: "gene.isin(['ACTB', 'GAPDH', 'TP53', 'MYC'])"
+      kwargs:
+        order: ["control", "treated"]
+  
+  export:
+    png: "nature_figure.png"
+    pdf: "nature_figure.pdf"
+    svg: "nature_figure.svg"
+
+metadata:
+  title: "Multi-omics analysis reveals key regulatory genes"
+  description: "Publication-ready figure with heatmap, volcano plot, and expression comparison"
+  keywords: ["genomics", "expression", "volcano plot", "heatmap"]
+  journal: "Nature"

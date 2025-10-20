@@ -1,0 +1,46 @@
+# Example recipe for image panel assembly (backward compatible with original Figmaker)
+version: "1"
+
+data:
+  - name: panels
+    path: "images/"  # Directory containing panel images
+
+figure:
+  style: nature
+  width_cm: 18.0
+  height_cm: 12.0
+  dpi: 600
+  background: white
+  font_family: Arial
+  label_style: "A, B, C..."
+  
+  panels:
+    - title: "Western Blot"
+      plot: image_panel
+      data: panels
+      image_path: "panel_a.tiff"
+      
+    - title: "Microscopy"
+      plot: image_panel
+      data: panels
+      image_path: "panel_b.tiff"
+      
+    - title: "Quantification"
+      plot: image_panel
+      data: panels
+      image_path: "panel_c.tiff"
+      
+    - title: "Model"
+      plot: image_panel
+      data: panels
+      image_path: "panel_d.tiff"
+  
+  export:
+    png: "figure1.png"
+    pdf: "figure1.pdf"
+    tiff: "figure1.tiff"
+
+metadata:
+  title: "Multi-panel figure assembly example"
+  description: "Demonstrates backward-compatible image panel assembly"
+  keywords: ["western blot", "microscopy", "quantification"]
