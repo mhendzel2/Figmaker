@@ -6,7 +6,7 @@ allowing for declarative figure specification and validation.
 """
 
 from __future__ import annotations
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from typing import Literal, Dict, List, Optional, Any
 
 
@@ -16,8 +16,7 @@ class DataSource(BaseModel):
     path: str
     sheet: Optional[str] = None  # For Excel files
     
-    class Config:
-        extra = "forbid"
+    model_config = ConfigDict(extra="forbid")
 
 
 class Transform(BaseModel):
@@ -25,8 +24,7 @@ class Transform(BaseModel):
     op: Literal["filter", "select", "mutate", "p_adjust_bh", "log2fc"]
     args: Dict[str, Any] = Field(default_factory=dict)
     
-    class Config:
-        extra = "forbid"
+    model_config = ConfigDict(extra="forbid")
 
 
 class Panel(BaseModel):
@@ -41,8 +39,7 @@ class Panel(BaseModel):
     transforms: List[Transform] = Field(default_factory=list)
     kwargs: Dict[str, Any] = Field(default_factory=dict)
     
-    class Config:
-        extra = "forbid"
+    model_config = ConfigDict(extra="forbid")
 
 
 class FigureSpec(BaseModel):
@@ -58,8 +55,7 @@ class FigureSpec(BaseModel):
     export: Dict[str, str] = Field(default_factory=lambda: {"png": "out.png"})
     metadata: Dict[str, Any] = Field(default_factory=dict)
     
-    class Config:
-        extra = "forbid"
+    model_config = ConfigDict(extra="forbid")
 
 
 class Recipe(BaseModel):
@@ -68,8 +64,7 @@ class Recipe(BaseModel):
     data: List[DataSource] = Field(default_factory=list)
     figure: FigureSpec
     
-    class Config:
-        extra = "forbid"
+    model_config = ConfigDict(extra="forbid")
 
 
 # Legacy support for current Figmaker GUI
@@ -80,8 +75,7 @@ class LegacyPanelData(BaseModel):
     name: str
     original_path: str
     
-    class Config:
-        arbitrary_types_allowed = True
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
 
 class LegacyAnnotation(BaseModel):
@@ -90,5 +84,4 @@ class LegacyAnnotation(BaseModel):
     x: int
     y: int
     
-    class Config:
-        extra = "forbid"
+    model_config = ConfigDict(extra="forbid")
